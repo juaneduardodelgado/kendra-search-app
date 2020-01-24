@@ -1,0 +1,33 @@
+{
+    "resourceName": "lexKendra2019",
+    "botName": "KendraBot",
+    "intents": [
+        {
+            "lambda": {
+                "region": "us-east-1",
+                "accountId": "232429559327",
+                "lambdaArn": "arn:aws:lambda:us-east-1:232429559327:function:kendraBot",
+                "lambdaName": "kendraBot"
+            },
+            "cancelMessage": "Okay, I will cancel the search",
+            "confirmationQuestion": "Do you want to search {topic}?",
+            "slots": [
+                {
+                    "name": "TopicDesc",
+                    "type": "TopicDesc",
+                    "prompt": "Do you want to know about {topic}?",
+                    "required": true,
+                    "customType": true
+                }
+            ],
+            "utterances": [
+                "what is fixed ladder"
+            ],
+            "intentName": "SearchIntent",
+            "newSlotTypes": []
+        }
+    ],
+    "outputVoice": "Joanna",
+    "sessionTimeout": "15",
+    "coppa": false
+}
