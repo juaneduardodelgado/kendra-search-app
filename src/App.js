@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Routes from './components/routes';
 import { withRouter } from 'react-router';
-
-import awsconfig from './aws-exports';
+import { Auth } from "aws-amplify";
+import Login from './components/Login';
 import logo from './logo.svg';
 import './App.css';
 
@@ -11,10 +11,34 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
+    this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
     this.state = {
       isAuthenticated: false
     }
   }
+
+  userHasAuthenticated = (value) => {
+    this.setState({ isAuthenticated: value });
+  }
+
+  handleLogout = async event => {
+    await Auth.signOut();
+    this.userHasAuthenticated(false);
+    this.props.history.push("/");
+  }
+
+  async componentDidMount() {
+    try {
+      await Auth.currentSession();
+      this.userHasAuthenticated(true);
+      this.props.history.push("/chat");
+    } catch(e) {
+      if (e !== 'No current user') {
+        alert(e);
+      }
+    }
+  }
+
   render() {
     return (
       <Fragment>
@@ -25,25 +49,25 @@ class App extends Component {
                     {this.state.isAuthenticated ? 
                       <Fragment>
                         <li className="nav-item">
-                          <NavLink onClick={this.handleLogout}>Logout</NavLink>
-                        </li>
-                        <li className="nav-item">
                           <NavLink to="/chat" className="nav-link">Chat</NavLink>
                         </li>
-                      </Fragment> :
+                        <li className="nav-item">
+                          <NavLink to="/" className="nav-link" onClick={this.handleLogout}>Logout</NavLink>
+                        </li>
+                      </Fragment> : 
                       <Fragment>
                         <li className="nav-item">
                           <NavLink to="/" className="nav-link">Login</NavLink>
                         </li>
                         <li className="nav-item">
-                          <NavLink to="/signup" className="nav-link">Signup</NavLink>
+                          <NavLink to="/Signup" className="nav-link">Signup</NavLink>
                         </li>
                       </Fragment>
-                    }
+                    } 
                   </ul>
               </div>
         </div>
-        <Routes/>
+        <Routes userhasauthenticated= { this.userHasAuthenticated } isauthenticated = { this.state.isAuthenticated }/>
       </Fragment>
     );
   }

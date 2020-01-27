@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import './index.css';
 import App from './App';
@@ -8,7 +8,12 @@ import * as serviceWorker from './serviceWorker';
 
 import config from './aws-exports'
 import Amplify, { Auth } from 'aws-amplify';
-Amplify.configure(config);
+
+Amplify.configure(config ,
+	(
+	Auth: {
+		mandatorySignIn: true
+	}));
 
 
 ReactDOM.render(<Router><App /></Router>, document.getElementById('root'));

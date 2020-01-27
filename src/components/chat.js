@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Amplify, { Interactions } from 'aws-amplify';
+import { Interactions } from 'aws-amplify';
 import { ChatFeed, Message } from 'react-chat-ui'
 
-class Chat extends React.Component {
+class Chat extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { FormText, FormGroup, FormControl, FormLabel, Button } from "react-bootstrap";
+import { Auth } from "aws-amplify";
 
-export default class Signup extends React.Component {
+export default class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,6 +13,7 @@ export default class Signup extends React.Component {
     	newUser: null
     };
   }
+
   validationForm() {
   	return (
   		this.state.email.length > 0 &&
@@ -31,10 +33,32 @@ export default class Signup extends React.Component {
 
   handleSubmit = async event => {
   	event.preventDefault();
+    let user = {};
+    try {
+      const newUser = await Auth.signUp({
+        username: this.state.email,
+        password: this.state.password,
+        attributes: {
+                  email: this.state.email
+        }
+      });
+      user = newUser;
+      this.setState({newUser});
+    } catch(e) {
+      alert(e.message + " " + user + " is not valid");
+    }
   }
 
   handleConfirmationSubmit = async event => {
   	event.preventDefault();
+    try {
+      await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
+      await Auth.signIn(this.state.email, this.state.password);
+      this.props.userHasAuthenticated(true);
+      this.props.history.push("/");
+    } catch(e) {
+      alert(e.meeage);
+    }
   }
 
   render() {

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, FormLabel, Button } from "react-bootstrap";
-import { Auth } from "aws-amplify";
 
 export default class Login extends Component {
     constructor(props) {
@@ -21,23 +20,16 @@ export default class Login extends Component {
             });
     }
 
-    handleSubmit = async event => {
+    handleSubmit = event => {
         event.preventDefault();
-        try {
-            await Auth.signIn(this.state.email, this.state.password);
-            this.props.userhasauthenticated(true);
-            this.props.history.push("/chat");
-        } catch (e) {
-            console.log("caught exception: "+ e);
-            alert(e.message);
-        }
+        console.log("Submitted",this.state.email,this.state.password);
     }
 
     render() {
         return (
             <div className="Home">
                 <div className="col-md-4"> 
-                    <form onSubmit={this.handleSubmit}>
+                    <form >
                         <FormGroup controlId="email">
                             <FormLabel>Email</FormLabel>
                             <FormControl
@@ -55,7 +47,7 @@ export default class Login extends Component {
                                 type="password"
                             />
                         </FormGroup>
-                        <Button type="submit">
+                        <Button onClick={this.handleSubmit}>
                         Login
                         </Button>
                     </form>
