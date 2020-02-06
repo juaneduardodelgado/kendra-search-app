@@ -1,5 +1,5 @@
 {
-    "resourceName": "lexKendra2019",
+    "resourceName": "kendralex2020",
     "botName": "KendraBot",
     "intents": [
         {
@@ -9,19 +9,19 @@
                 "lambdaArn": "arn:aws:lambda:us-east-1:232429559327:function:kendraBot",
                 "lambdaName": "kendraBot"
             },
-            "cancelMessage": "Okay, I will cancel the search",
-            "confirmationQuestion": "Do you want to search {topic}?",
             "slots": [
                 {
                     "name": "TopicDesc",
                     "type": "TopicDesc",
-                    "prompt": "Do you want to know about {topic}?",
+                    "prompt": "What topic are you interested in?",
                     "required": true,
                     "customType": true
                 }
             ],
             "utterances": [
-                "what is fixed ladder"
+                "What is fixed ladder?",
+                "Can you search Deccan Traps",
+                "Please find out about Real World Evidence"
             ],
             "intentName": "SearchIntent",
             "newSlotTypes": []

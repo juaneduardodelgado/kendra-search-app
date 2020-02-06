@@ -10,10 +10,20 @@ import config from './aws-exports'
 import Amplify, { Auth } from 'aws-amplify';
 
 Amplify.configure(config ,
-	(
+	({
 	Auth: {
 		mandatorySignIn: true
-	}));
+	},
+	Interactions: {
+	    bots: {
+    	  "KendraBot": {
+        	"name": "KendraBot",
+        	"alias": "dev",
+        	"region": "us-east-1",
+      				},
+			}
+		}
+}));
 
 
 ReactDOM.render(<Router><App /></Router>, document.getElementById('root'));

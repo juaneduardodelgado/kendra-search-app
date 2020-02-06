@@ -42,12 +42,41 @@ class Chat extends Component {
     		input: ''
     	})
     	const response = await Interactions.send("KendraBot", input)
-    	const responseMessage = new Message({
-    		id: 1,
-    		message: response.message
-    	})
-    	messages = [...this.state.messages, responseMessage]
-    	this.setState({ messages })
+
+      if(response.message.charAt(0) === "[") {
+        const responseMessageArr = JSON.parse(response.message.replace(/'/g, '"'));
+
+        for (var i=0; i< responseMessageArr.length; i++) {
+          if (i === 0) {
+            const responseMessage = new Message({
+            id:i+1,
+            message: "I have found the following documents: "
+          })
+            messages = [...this.state.messages, responseMessage]
+            this.setState({ messages })
+          }
+          const docTitle = responseMessageArr[i].document_title;
+          const docExcerpt = responseMessageArr[i].document_excerpt;
+          const docLink = responseMessageArr[i].document_uri;
+          const messageText = "Title: " + docTitle +"\n Excerpt: "+ docExcerpt + "\n URI: "+ docLink;
+          const responseMessage = new Message({
+            id:i+2,
+            message: messageText
+          })
+          messages = [...this.state.messages, responseMessage]
+          this.setState({ messages })
+        }
+      } else {
+
+      const responseMessage = new Message({
+        id: 1,
+        message: response.message
+      })
+
+      messages = [...this.state.messages, responseMessage]
+      this.setState({ messages })
+
+      }
 
     	if (response.dialogState === 'Fulfilled') {
     		if (response.intentName === 'SearchIntent') {
@@ -60,21 +89,21 @@ class Chat extends Component {
     	return (
       		<div className="App">
 	        	<header style={styles.header}>
-	          		<p style={styles.headerTitle}>Welcome to Kendra Search Bot!</p>
+	          		<p style={styles.headerTitle}>Kendra Search Bot</p>
 	        	</header>
-	        	<div style={styles.messagesContainer}>
-		        	<h2>Welcome to Kendra Search</h2>
-			        <ChatFeed
-			          messages={this.state.messages}
-			          hasInputField={false}
-			          bubbleStyles={styles.bubbleStyles}
-			        />
-			        <input
-		         	onKeyPress={this._handleKeyPress}
-		        	onChange={this.onChange.bind(this)}
-		        	style={styles.input}
-		        	value={this.state.input}/>
-			    </div>
+  	        	<div style={styles.messagesContainer}>
+  		        	<h2>Welcome to Kendra Search!</h2>
+    			        <ChatFeed
+    			          messages={this.state.messages}
+    			          hasInputField={false}
+    			          bubbleStyles={styles.bubbleStyles}
+    			        />
+  			        <input
+  		         	onKeyPress={this._handleKeyPress}
+  		        	onChange={this.onChange.bind(this)}
+  		        	style={styles.input}
+  		        	value={this.state.input}/>
+  			    </div>
 	    	</div>
 	    );
 	}

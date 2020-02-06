@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "kendra_chat_bot_identitypool_b0b2c1af",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "cognit3ecc9250",
-    "userPoolName": "cognitod8446db9_userpool_3ecc9250",
+    "identityPoolName": "kendrachatbotd2fda923_identitypool_d2fda923",
+    "allowUnauthenticatedIdentities": true,
+    "resourceNameTruncated": "kendrad2fda923",
+    "userPoolName": "kendrachatbotd2fda923_userpool_d2fda923",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "cognit3ecc9250_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "kendrad2fda923_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
+    "resourceName": "kendrachatbotd2fda923",
     "authSelections": "identityPoolAndUserPool",
-    "resourceName": "cognitod8446db9",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -45,6 +45,9 @@
         ]
     },
     "useDefault": "default",
+    "usernameAttributes": [
+        "email"
+    ],
     "userPoolGroupList": [],
     "dependsOn": []
 }

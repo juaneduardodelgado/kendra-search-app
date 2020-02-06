@@ -10,7 +10,8 @@ export default class Signup extends Component {
     	password: "",
     	confirmPassword: "",
     	confirmationCode: "",
-    	newUser: null
+    	newUser: null,
+      signUpFailed: false
     };
   }
 
@@ -45,28 +46,43 @@ export default class Signup extends Component {
       user = newUser;
       this.setState({newUser});
     } catch(e) {
-      alert(e.message + " " + user + " is not valid");
+      if(e.name === 'UserLambdaValidationException') {
+        this.setState({signUpFailed: true})
+      } else {
+        alert(e.message + " " + user + " is not valid");
+      }
     }
   }
 
   handleConfirmationSubmit = async event => {
   	event.preventDefault();
+    console.log("starting confirmation");
     try {
       await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
+      console.log("Sign-up confirmation");
       await Auth.signIn(this.state.email, this.state.password);
-      this.props.userHasAuthenticated(true);
+      console.log("Signed-in to the App");
+      console.log(typeof this.props.userHasAuthenticated);
+      this.props.userhasauthenticated(true);
       this.props.history.push("/");
     } catch(e) {
+      console.log(e);
       alert(e.meeage);
     }
+  }
+
+  componentDidCatch(error, info) {
+    this.setState({hasError: true});
   }
 
   render() {
   	return (
   			<div className="Signup">
-  				{this.state.newUser === null ? 
-  					this.renderForm() : 
-  					this.renderConfirmationForm()}
+  				{this.state.newUser === null && this.state.signUpFailed == false? 
+  					this.renderForm() :
+            (this.state.signUpFailed? this.renderInvalidDomainPage():
+              this.renderConfirmationForm())
+  					}
   			</div>
   		);
   }
@@ -90,6 +106,16 @@ export default class Signup extends Component {
        			</Button>
        		</form>
        	</div>
+       </div>
+    );
+  }
+
+  renderInvalidDomainPage(){
+    return (
+       <div className="Home">
+        <div className="col-md-4">
+          <span>Signup through the specified domain is not allowed</span>
+        </div>
        </div>
     );
   }

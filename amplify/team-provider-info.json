@@ -1,19 +1,19 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-kendra-chat-bot-dev-112323-authRole",
-            "UnauthRoleArn": "arn:aws:iam::232429559327:role/amplify-kendra-chat-bot-dev-112323-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::232429559327:role/amplify-kendra-chat-bot-dev-112323-authRole",
+            "AuthRoleName": "amplify-kendra-chat-bot-dev-112035-authRole",
+            "UnauthRoleArn": "arn:aws:iam::232429559327:role/amplify-kendra-chat-bot-dev-112035-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::232429559327:role/amplify-kendra-chat-bot-dev-112035-authRole",
             "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-kendra-chat-bot-dev-112323-deployment",
-            "UnauthRoleName": "amplify-kendra-chat-bot-dev-112323-unauthRole",
-            "StackName": "amplify-kendra-chat-bot-dev-112323",
-            "StackId": "arn:aws:cloudformation:us-east-1:232429559327:stack/amplify-kendra-chat-bot-dev-112323/cff3a860-3dd2-11ea-8c3b-12d8771823f5",
-            "AmplifyAppId": "d2f2zq66ghwqt2"
+            "DeploymentBucketName": "amplify-kendra-chat-bot-dev-112035-deployment",
+            "UnauthRoleName": "amplify-kendra-chat-bot-dev-112035-unauthRole",
+            "StackName": "amplify-kendra-chat-bot-dev-112035",
+            "StackId": "arn:aws:cloudformation:us-east-1:232429559327:stack/amplify-kendra-chat-bot-dev-112035/3693bec0-41c0-11ea-9aa0-0a1f71f25d05",
+            "AmplifyAppId": "d353jh0uqmfzrd"
         },
         "categories": {
             "auth": {
-                "cognitod8446db9": {}
+                "kendrachatbotd2fda923": {}
             }
         }
     }
