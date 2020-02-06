@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/search",
+            "lambdaFunction": "kendraSearch",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "searchApi",
+    "apiName": "searchApi",
+    "functionArns": [
+        {
+            "lambdaFunction": "kendraSearch"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-kendra-chat-bot-dev-112035-authRole",
+        "unAuthRoleName": "amplify-kendra-chat-bot-dev-112035-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "kendraSearch",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

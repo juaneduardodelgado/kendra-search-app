@@ -18,29 +18,14 @@ exports.handler = function(event, context) {
         {
             "name": "SearchIntent",
             
-            "confirmationPrompt": {
-                "maxAttempts": 2, 
-                "messages": [
-                    {
-                        "content": "Do you want to search {topic}?", 
-                        "contentType": "PlainText"
-                    }
-                ]
-            }, 
             
-            
-            "rejectionStatement": {
-                "messages": [
-                    {
-                    "content": "Okay, I will cancel the search", 
-                    "contentType": "PlainText"
-                    }
-                ]
-            }, 
-        
             "sampleUtterances": [
             
-                "what is fixed ladder",
+                "What is fixed ladder?",
+            
+                "Can you search Deccan Traps",
+            
+                "Please find out about Real World Evidence",
             
             ],
         
@@ -70,7 +55,7 @@ exports.handler = function(event, context) {
                         "maxAttempts": 3,
                         "messages": [
                             {
-                                "content": "Do you want to know about {topic}?",
+                                "content": "What topic are you interested in?",
                                 "contentType": "PlainText"
                             }
                         ]
@@ -275,7 +260,7 @@ function ensureLambdaFunctionAccess(intent){
 
         const params = {
             FunctionName: lambdaName,
-            StatementId: `Lex-${intent.name}`+ "c8d8943d",
+            StatementId: `Lex-${intent.name}`+ "4d5ba9d8",
             Action: 'lambda:InvokeFunction',
             Principal: 'lex.amazonaws.com',
             SourceArn: `arn:aws:lex:${region}:${accountId}:intent:${intent.name}:*`,
