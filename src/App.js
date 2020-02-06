@@ -1,135 +1,82 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import Routes from './components/routes';
+import { withRouter } from 'react-router';
+import { Auth } from "aws-amplify";
 
-import Amplify, { Interactions } from 'aws-amplify';
-
-import API, { graphqlOperation } from '@aws-amplify/api';
-import PubSub from '@aws-amplify/pubsub';
-
-import { createTodo } from './graphql/mutations';
-
-import { ChatFeed, Message } from 'react-chat-ui'
-
-import awsconfig from './aws-exports';
-import logo from './logo.svg';
 import './App.css';
 
-API.configure(awsconfig);
-PubSub.configure(awsconfig);
-
-async function createNewTodo() {
-  const todo = { name: "Sample Todo object", description: "Realtime and offline"};
-  await API.graphql(graphqlOperation(createTodo, { input: todo }));
-}
 
 class App extends Component {
-  state = {
-    input: '',
-    finalMessage: '',
-    messages: [
-      new Message({
-        id: 1,
-        message: "Hello, how can I help you today?",
-      })
-    ]
-  }
-  _handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.submitMessage()
+  constructor(props) {
+    super(props);
+    this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
+    this.state = {
+      isAuthenticated: false
     }
   }
-  onChange(e) {
-    const input = e.target.value
-    this.setState({
-      input
-    })
+
+  userHasAuthenticated = (value) => {
+    this.setState({ isAuthenticated: value });
   }
-  async submitMessage() {
-    const { input } = this.state
-    if (input === '') return
-    const message = new Message({
-      id: 0,
-      message: input,
-    })
-    let messages = [...this.state.messages, message]
 
-    this.setState({
-      messages,
-      input: ''
-    })
-    const response = await Interactions.send("KendraBot", input)
-    const responseMessage = new Message({
-      id: 1,
-      message: response.message
-    })
-    messages = [...this.state.messages, responseMessage]
-    this.setState({ messages })
+  handleLogout = async event => {
+    await Auth.signOut();
+    this.userHasAuthenticated(false);
+    this.props.history.push("/");
+  }
 
-    if (response.dialogState === 'Fulfilled') {
-      if (response.intentName === 'SearchIntent') {
-        const finalMessage = response.message
-        this.setState({ finalMessage })
+  async componentDidMount() {
+    try {
+      await Auth.currentSession();
+      this.userHasAuthenticated(true);
+      this.props.history.push("/chat");
+    } catch(e) {
+      if (e !== 'No current user') {
+        alert(e);
       }
     }
   }
+
   render() {
     return (
-      <div className="App">
-        <header style={styles.header}>
-          <p style={styles.headerTitle}>Welcome to Kendra Search Bot!</p>
-        </header>
-        <div style={styles.messagesContainer}>
-        <h2>Welcome to Kendra Search</h2>
-        <ChatFeed
-          messages={this.state.messages}
-          hasInputField={false}
-          bubbleStyles={styles.bubbleStyles}
-        />
-
-        <input
-          onKeyPress={this._handleKeyPress}
-          onChange={this.onChange.bind(this)}
-          style={styles.input}
-          value={this.state.input}
-        />
+      <Fragment>
+        <div className="navbar navbar-expand-lg navbar-light bg-light">
+            <Link to="/" className="navbar-brand" href="#"><h1>Kendra Chat Bot App</h1></Link>
+              <div className="collapse navbar-collapse" id="navbarNav">
+                {this.state.isAuthenticated ?
+                  <Fragment>
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                          <NavLink to="/chat" className="nav-link">Chat</NavLink>
+                        </li>
+                        <li className="nav-item">
+                          <NavLink to="/Search" className="nav-link">Search</NavLink>
+                        </li>
+                    </ul>
+                    <ul className="navbar-nav w-100 justify-content-end">
+                      <li className="nav-item logout-nav">
+                        <NavLink to="/" className="nav-link" onClick={this.handleLogout}>Logout</NavLink>
+                      </li>
+                    </ul>
+                  </Fragment> :
+                  <Fragment>
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                          <NavLink to="/" className="nav-link">Login</NavLink>
+                        </li>
+                        <li className="nav-item">
+                          <NavLink to="/Signup" className="nav-link">Signup</NavLink>
+                        </li>
+                      </ul>
+                  </Fragment>
+                    }
+              </div>
         </div>
-      </div>
+        <Routes userhasauthenticated= { this.userHasAuthenticated } isauthenticated = { this.state.isAuthenticated }/>
+      </Fragment>
     );
   }
 }
 
-const styles = {
-  bubbleStyles: {
-    text: {
-      fontSize: 16,
-    },
-    chatbubble: {
-      borderRadius: 30,
-      padding: 10
-    }
-  },
-  headerTitle: {
-    color: 'white',
-    fontSize: 22
-  },
-  header: {
-    backgroundColor: 'rgb(0, 132, 255)',
-    padding: 20,
-    borderTop: '12px solid rgb(204, 204, 204)'
-  },
-  messagesContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: 10,
-    alignItems: 'center'
-  },
-  input: {
-    fontSize: 16,
-    padding: 10,
-    outline: 'none',
-    width: 350,
-    border: 'none',
-    borderBottom: '2px solid rgb(0, 132, 255)'
-  }
-}
-
-export default App
+export default withRouter(App);
